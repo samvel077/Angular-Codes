@@ -1,0 +1,49 @@
+<div class="container">
+   <form class="card" [formGroup]='form' (ngSubmit)="submit()">
+      <h1>Angular Forms</h1>
+
+      <div class="form-control">
+         <label>Email</label>
+         <input type="text" placeholder="Email" formControlName='email'>
+         <div class="validation" *ngIf="form.get('email').touched">
+            <small *ngIf="form.get('email').errors?.required">
+               Поле email не может быть пустым
+            </small>
+            <small *ngIf="form.controls['email'].errors?.email">
+               Введите корректный email
+            </small>
+            <small *ngIf="form.get('email').errors?.restrictedEmail">
+               custom validator
+            </small>
+         </div>
+      </div>
+
+      <div class="form-control" formGroupName='address'>
+         <label>City</label>
+         <input type="text" placeholder="City" formControlName='city'>
+
+         <label>Country</label>
+         <input type="text" placeholder="country" formControlName='country'>
+      </div>
+
+      <div class="form-control" formArrayName='skills'>
+         <div *ngFor="let skill of skillsArray.controls; let idx = index">
+            <label for="skill-{{idx}}">Skill</label>
+            <input id="skill-{{idx}}" type="text" placeholder="Skill" [formControlName]='idx'>
+
+            <!-- for FormArray how have formGroupse -->
+            <!-- <div [formGroupName]='idx'>
+               <label for="skill-{{idx}}">Skill</label>
+               <input id="skill-{{idx}}" type="text" placeholder="Skill" formControlName='skill'>
+
+               <label for="name-{{idx}}">Name</label>
+               <input id="name-{{idx}}" type="text" placeholder="Name" formControlName='name'>
+            </div> -->
+         </div>
+
+         <button class="btn" type="button" (click)="addSkill()">Add Skill</button>
+      </div>
+
+      <button class="btn" type="submit" [disabled]='form.invalid'>Отправить</button>
+   </form>
+</div>
