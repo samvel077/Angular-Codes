@@ -173,3 +173,140 @@ export class AppComponent implements OnInit {
 //     return throwError(errorMessage);
 //   }
 // }
+
+//----------http requests and reportProgress----------
+
+
+
+
+
+
+
+// ------------Custom Validator-----------------
+// import { Directive } from '@angular/core';
+// import { AbstractControl, NG_VALIDATORS, Validator } from '@angular/forms';
+
+// @Directive({
+//   selector: '[emailvalidator][ngModel]',
+//   providers: [
+//     {
+//      provide: NG_VALIDATORS,
+//      useExisting: EmailValidator,
+//      multi: true
+//     }
+//    ]
+// })
+
+// export class EmailValidator implements Validator {
+//   constructor() { }
+
+//   validate(c: AbstractControl): { [key: string]: any } {
+//       if (!c.value && c.errors && !c.errors.required) {
+//         return null;
+//       }
+
+//       const validate =
+//         /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+(\)0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+(\)0-9=?A-Z^_`a-z{|}~]+)*@\w+([\.-]?\w+)*(\.\w{2,9})+$/g
+//         .test(c.value);
+//       return (validate)
+//         ? null
+//         : { email: c.value };
+//   }
+// }
+// ------------Custom Validator-----------------
+
+
+
+
+
+
+
+// --------------Intercepter-----------------
+// import { Injectable, Inject } from '@angular/core';
+// import { Router } from '@angular/router';
+// import { HttpInterceptor, HttpRequest, HttpEvent, HttpHandler, HttpErrorResponse } from '@angular/common/http';
+// import { Observable, throwError } from 'rxjs';
+// import { catchError } from 'rxjs/operators';
+// import { SnotifyService } from 'ng-snotify';
+
+// import { IAppConfig } from 'common-lib';
+
+
+// @Injectable({providedIn: 'root'})
+// export class AuthInterceptor implements HttpInterceptor {
+//   private _config;
+//   constructor(private router: Router,
+//     @Inject('config') config: IAppConfig,
+//     private snotifySvc: SnotifyService) {
+//       this._config = config;
+//     }
+
+//   private handleAuthError(err: HttpErrorResponse): Observable<any> {
+//     if (err.status === 401) {
+//       window.location.href = this._config.Host + this._config.ReturnUrl
+//         + window.location.pathname
+//         + window.location.search.replace('?', '%3F')
+//         + window.location.hash.replace('#', '%23');
+//     }
+
+//     if (err.status === 403) {
+//       this.router.navigate(['']);
+//     }
+
+//     if (err.status === 500) {
+//       this.snotifySvc.error(
+//         'Please let us know about this error or try again later',
+//         'Server Error',
+//         { timeout: 10000 });
+//     }
+
+//     return throwError(err);
+//   }
+
+//   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+//     const apiAuth: HttpRequest<any> = req.clone({
+//       headers: req.headers.set('x-api-token', 'Jnsdi7uJ87%2')
+//     });
+
+//     return next.handle(apiAuth)
+//       .pipe(catchError(err => this.handleAuthError(err)));
+//   }
+// }
+
+
+// add into module
+// providers: [ 
+//    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+// ]
+// --------------Intercepter-----------------
+
+
+
+
+
+
+
+// --------------Guard-----------------
+// import { Injectable } from '@angular/core';
+// import { CanActivate, CanActivateChild, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+// import { Observable } from 'rxjs';
+
+// import { AccountService } from 'common-lib';
+
+
+// @Injectable()
+// export class UserGuard implements CanActivate, CanActivateChild {
+
+//   constructor(private accountSvc: AccountService, private router: Router) { }
+
+//   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+//     return this.accountSvc.checkUser();
+//   }
+
+//   canActivateChild(
+//     childRoute: ActivatedRouteSnapshot,
+//     state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+//     return this.accountSvc.checkUser();
+//   }
+// }
+// --------------Guard-----------------
